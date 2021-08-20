@@ -10,14 +10,10 @@ export const App = () => {
   const user = useTracker(() => Meteor.user());
 
   const toggleChecked = ({ _id, isChecked }) => {
-    TasksCollection.update(_id, {
-      $set: {
-        isChecked: !isChecked
-      }
-    })
+    Meteor.call('tasks.setIsChecked', _id, !isChecked);
   };
 
-  const deleteTask = ({ _id }) => TasksCollection.remove(_id);
+  const deleteTask = ({ _id }) => Meteor.call('tasks.remove', _id);
 
   const [hideCompleted, setHideCompleted] = useState(false);
 
@@ -76,7 +72,7 @@ export const App = () => {
             <div className="user" onClick={logout}>
               {user.username} 🚪
             </div>
-            <TaskForm user={user} />
+            <TaskForm />
 
             <div className="filter">
               <button onClick={() => setHideCompleted(!hideCompleted)}>
